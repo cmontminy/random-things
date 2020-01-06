@@ -1,42 +1,98 @@
 import java.util.ArrayList;
+import processing.core.PApplet;
 
 public class Grid {
 
     private final static int DEFAULT_SIZE = 10;
-
+    
+    private PApplet p;
     private Square[][] board;
-    private int xSize = DEFAULT_SIZE;
-    private int ySize = DEFAULT_SIZE;
+    private int xNum;
+    private int yNum;
+    private int xSize;
+    private int ySize;
 
-    public Grid() {
-        board = new Square[10][10];
+    public Grid(PApplet p) {
+        this(DEFAULT_SIZE, DEFAULT_SIZE, p);
+    }
+
+    public Grid(int xNum, int yNum, PApplet p) {
+    	this.p = p;
+        this.xNum = xNum;
+        this.yNum = yNum;
+        xSize = p.width / xNum;
+        ySize = p.height / yNum;
+        board = new Square[xNum][yNum];
         makeBoard();
+        for (int i = 0; i < 100; i++) {
+            int randX = (int) p.random(getXNum());
+            int randY = (int) p.random(getYNum());
+            updateState(randX, randY, true);
+        }
+    }
+    
+    public void updateSquares() {
+        Grid newBoard = new Grid(getXNum(), getYNum(), p);
+        for (int y = 0; y < yNum; y++) {
+            for (int x = 0; x < xNum; x++) {
+                Square[] currentNeighbors = getNeighbors(x, y);
+                int numSquares = currentNeighbors.length;
+                if (getState(x, y)) {
+                    if (numSquares == 2 || numSquares == 3) {
+                        newBoard.updateState(x, y, true);
+                    } else {
+                        newBoard.updateState(x, y, false);
+                    }
+                } else {
+                    if (numSquares == 3) {
+                        newBoard.updateState(x, y, true);
+                    } else {
+                        newBoard.updateState(x, y, false);
+                    }
+                }
+            }
+        }
+        // System.out.println("NEW BOARD");
+        // newBoard.printBoard();
+        this.board = newBoard.board;
+        // System.out.println("UPDATED BOARD");
+        // board.printBoard();
     }
 
-    public Grid(int x, int y) {
-        board = new Square[x][y];
-        xSize = x;
-        ySize = y;
-        makeBoard();
+    public void drawBoard() {
+        boolean[][] squareStatus = getStates();
+        for (int x = 0; x < xNum; x++) {
+            for (int y = 0; y < yNum; y++) {
+                if (squareStatus[x][y]) {
+                    p.rect(x * xSize, y * ySize, xSize, ySize);
+                } else {
+                	p.fill(255);
+                    p.rect(x * xSize, y * ySize, xSize, ySize);
+                    p.fill(0);
+                }
+            }
+        }
     }
 
-    public int getXSize() {
-        return xSize;
+    public int getXNum() {
+        return xNum;
     }
 
-    public int getYSize() {
-        return ySize;
+    public int getYNum() {
+        return yNum;
     }
 
     public boolean[][] getStates() {
-        boolean[][] states = new boolean[xSize][ySize];
-        for (int x = 0; x < xSize; x++) {
-            for (int y = 0; y < ySize; y++) {
+        boolean[][] states = new boolean[xNum][yNum];
+        for (int x = 0; x < xNum; x++) {
+            for (int y = 0; y < yNum; y++) {
                 states[x][y] = board[x][y].getState();
             }
         }
         return states;
     }
+    
+    
 
     public Square[] getNeighbors(int x, int y) {
         ArrayList<Square> neighbors = new ArrayList<>();
@@ -88,6 +144,4 @@ public class Grid {
             }
         }
     }
-
-
 }
