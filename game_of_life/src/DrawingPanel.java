@@ -22,23 +22,23 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 public class DrawingPanel implements ActionListener {
-    
+
     /**
      * Delay between repaints in milliseconds.
      */
-    public static final int DELAY = 250; 
+    public static final int DELAY = 250;
 
     private static final String DUMP_IMAGE_PROPERTY_NAME = "drawingpanel.save";
     private static String TARGET_IMAGE_FILE_NAME = null;
-    private static final boolean PRETTY = true;  // true to anti-alias
-    private static boolean DUMP_IMAGE = false;  // true to write DrawingPanel to file
+    private static final boolean PRETTY = true; // true to anti-alias
+    private static boolean DUMP_IMAGE = false; // true to write DrawingPanel to file
 
-    private int width, height;    // dimensions of window frame
-    private JFrame frame;         // overall window frame
-    private JPanel panel;         // overall drawing surface
-    private BufferedImage image;  // remembers drawing commands
-    private Graphics2D g2;        // graphics context for painting
-    private JLabel statusBar;     // status bar showing mouse position
+    private int width, height; // dimensions of window frame
+    private JFrame frame; // overall window frame
+    private JPanel panel; // overall drawing surface
+    private BufferedImage image; // remembers drawing commands
+    private Graphics2D g2; // graphics context for painting
+    private JLabel statusBar; // status bar showing mouse position
     private long createTime;
 
     static {
@@ -47,8 +47,9 @@ public class DrawingPanel implements ActionListener {
     }
 
     /**
-     *  Construct a drawing panel of given width and height enclosed in a window.
-     * @param width width in pixels of panel to create. Must be > 0
+     * Construct a drawing panel of given width and height enclosed in a window.
+     * 
+     * @param width  width in pixels of panel to create. Must be > 0
      * @param height height in pixels of panel to create. Must be > 0
      */
     public DrawingPanel(int width, int height) {
@@ -77,7 +78,7 @@ public class DrawingPanel implements ActionListener {
         this.panel.addMouseListener(listener);
         this.panel.addMouseMotionListener(listener);
 
-        this.g2 = (Graphics2D)image.getGraphics();
+        this.g2 = (Graphics2D) image.getGraphics();
         this.g2.setColor(Color.BLACK);
         if (PRETTY) {
             this.g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -110,7 +111,7 @@ public class DrawingPanel implements ActionListener {
     }
 
     /**
-     *  Used for an internal timer that keeps repainting.
+     * Used for an internal timer that keeps repainting.
      */
     public void actionPerformed(ActionEvent e) {
         this.panel.repaint();
@@ -124,6 +125,7 @@ public class DrawingPanel implements ActionListener {
 
     /**
      * Obtain the Graphics object to draw on the panel.
+     * 
      * @return the graphics object for this DrawingPanel to be able to draw on it.
      */
     public Graphics2D getGraphics() {
@@ -131,7 +133,8 @@ public class DrawingPanel implements ActionListener {
     }
 
     /**
-     *  Set the background color of the drawing panel.
+     * Set the background color of the drawing panel.
+     * 
      * @param c the background color for this DrawingPanel
      */
     public void setBackground(Color c) {
@@ -140,6 +143,7 @@ public class DrawingPanel implements ActionListener {
 
     /**
      * Show or hide the drawing panel on the screen.
+     * 
      * @param visible true if this drawingPanel should be visible, flase otherwise.
      */
     public void setVisible(boolean visible) {
@@ -147,19 +151,21 @@ public class DrawingPanel implements ActionListener {
     }
 
     /**
-     *  Makes the program pause for the given amount of time.
-     *  Use this for animation. 
+     * Makes the program pause for the given amount of time. Use this for animation.
+     * 
      * @param millis The time to sleep in milliseconds
      */
     public void sleep(int millis) {
         try {
             Thread.sleep(millis);
-        } catch (InterruptedException e) {}
+        } catch (InterruptedException e) {
+        }
     }
 
     /**
-     *  Take the current contents of the panel and write them to a file.
-     *  The resulting file is an image file.
+     * Take the current contents of the panel and write them to a file. The
+     * resulting file is an image file.
+     * 
      * @param filename The file to write to.
      */
     public void save(String filename) {
@@ -181,7 +187,7 @@ public class DrawingPanel implements ActionListener {
     }
 
     /**
-     *  Makes drawing panel become the frontmost window on the screen.
+     * Makes drawing panel become the frontmost window on the screen.
      */
     public void toFront() {
         this.frame.toFront();

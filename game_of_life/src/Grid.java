@@ -20,6 +20,14 @@ public class Grid {
         makeBoard();
     }
 
+    public Square getSquare(int x, int y) {
+        return board[x][y];
+    }
+
+    public int getSquareColor(int x, int y) {
+        return board[x][y].getColor();
+    }
+
     public int getXSize() {
         return xSize;
     }
@@ -64,6 +72,11 @@ public class Grid {
     }
 
     public void updateState(int x, int y, boolean status) {
+        if (status) {
+            board[x][y].setColorNum(board[x][y].getColor() + 1);
+        } else {
+            board[x][y].setColorNum(0);
+        }
         board[x][y].setState(status);
     }
 
@@ -88,6 +101,5 @@ public class Grid {
             }
         }
     }
-
 
 }
