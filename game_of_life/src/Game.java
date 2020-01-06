@@ -12,15 +12,20 @@ public class Game extends PApplet {
     }
     
     public void settings() {
+    	// Don't add anything else here I think
     	size(xSize, ySize);
     }
     
     public void setup() {
+    	// One time setup operations
         System.out.println("Launching game with a board of size " + xSize + " x " + ySize);
+        // Uncomment to slowdown the animation:
+        //frameRate(5);
         startGame(xSize, ySize);	
     }
     
     public void draw() {
+    	// Operations to repeat
     	updateSquares();
     	drawBoard();
     }
