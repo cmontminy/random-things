@@ -3,9 +3,7 @@ import processing.core.PApplet;
 public class Game extends PApplet {
 
     private static Grid board;
-    private static int screenWidth = 800;
-    private static int screenHeight = 800;
-    private static int pixelSize = 20;
+
 
     public static void main(String[] args) {
         PApplet.main("Game");
@@ -13,15 +11,15 @@ public class Game extends PApplet {
     
     public void settings() {
     	// Don't add anything else here I think
-    	size(screenWidth, screenHeight);
+    	size(LConstants.screenWidth, LConstants.screenHeight + LConstants.menuHeight);
     }
     
     public void setup() {
     	// One time setup operations
-        System.out.println("Launching game with a board of size " + screenWidth + " x " + screenHeight);
+        System.out.println("Launching game with a board of size " + LConstants.screenWidth + " x " + LConstants.screenHeight);
         // Uncomment to slowdown the animation:
         //frameRate(5);
-        board = new Grid(screenWidth / pixelSize, screenHeight / pixelSize, this);	
+        board = new Grid(this);	
     }
     
     public void draw() {

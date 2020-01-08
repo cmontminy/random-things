@@ -1,77 +1,108 @@
 import java.util.ArrayList;
 import processing.core.PApplet;
+import processing.core.PConstants;
 
 public class Grid {
 
-    private final static int DEFAULT_SIZE = 10;
-    
     private PApplet p;
     private Square[][] board;
+    private Button playButton;
     private int xNum;
     private int yNum;
     private int xSize;
     private int ySize;
+    private boolean isActive;
+    private boolean prevPressed;
 
     public Grid(PApplet p) {
-        this(DEFAULT_SIZE, DEFAULT_SIZE, p);
+    	this.p = p;
+    	playButton = new Button(p, LConstants.playButtonX, LConstants.playButtonY, LConstants.playButtonWidth,
+    			LConstants.playButtonHeight, LConstants.playButtonText);
+    	playButton.setActive(true);
+        this.xNum = LConstants.screenWidth / LConstants.pixelSize;
+        this.yNum = LConstants.screenHeight / LConstants.pixelSize;
+        xSize = p.width / xNum;
+        ySize = (p.height - LConstants.menuHeight) / yNum;
+        board = new Square[xNum][yNum];
+       
+        makeBoard();
+//        for (int i = 0; i < 100; i++) {
+//            int randX = (int) p.random(getXNum());
+//            int randY = (int) p.random(getYNum());
+//            updateState(randX, randY, true);
+//        }
     }
 
-    public Grid(int xNum, int yNum, PApplet p) {
-    	this.p = p;
-        this.xNum = xNum;
-        this.yNum = yNum;
-        xSize = p.width / xNum;
-        ySize = p.height / yNum;
-        board = new Square[xNum][yNum];
-        makeBoard();
-        for (int i = 0; i < 100; i++) {
-            int randX = (int) p.random(getXNum());
-            int randY = (int) p.random(getYNum());
-            updateState(randX, randY, true);
-        }
+    private void handleButtons() {
+    	if (playButton.isClicked()) {
+    		isActive = !isActive;
+    	}
+    }
+    
+    private void handleMouseInput() {
+    	int pXPos = p.pmouseX / LConstants.pixelSize;
+    	int pYPos = (p.pmouseY - LConstants.menuHeight) / LConstants.pixelSize;
+    	int xPos = p.mouseX / LConstants.pixelSize;
+    	int yPos = (p.mouseY - LConstants.menuHeight) / LConstants.pixelSize;
+    	if ((!prevPressed || (pXPos != xPos || pYPos != yPos)) && p.mousePressed 
+    			&& !isActive && cordsInBounds(xPos, yPos)) {
+    		updateState(xPos, yPos, !getState(xPos, yPos));
+    	}
+    	prevPressed = p.mousePressed;
+    }
+    
+    private boolean cordsInBounds(int xPos, int yPos) {
+    	return xPos >= 0 && xPos < xNum && yPos >= 0 && yPos < yNum;
     }
     
     public void updateSquares() {
-        Grid newBoard = new Grid(getXNum(), getYNum(), p);
-        for (int y = 0; y < yNum; y++) {
-            for (int x = 0; x < xNum; x++) {
-                Square[] currentNeighbors = getNeighbors(x, y);
-                int numSquares = currentNeighbors.length;
-                if (getState(x, y)) {
-                    if (numSquares == 2 || numSquares == 3) {
-                        newBoard.updateState(x, y, true);
-                    } else {
-                        newBoard.updateState(x, y, false);
-                    }
-                } else {
-                    if (numSquares == 3) {
-                        newBoard.updateState(x, y, true);
-                    } else {
-                        newBoard.updateState(x, y, false);
-                    }
-                }
-            }
-        }
-        // System.out.println("NEW BOARD");
-        // newBoard.printBoard();
-        this.board = newBoard.board;
-        // System.out.println("UPDATED BOARD");
-        // board.printBoard();
+    	handleButtons();
+    	handleMouseInput();
+    	if (isActive) {
+	        Grid newBoard = new Grid(p);
+	        for (int y = 0; y < yNum; y++) {
+	            for (int x = 0; x < xNum; x++) {
+	                Square[] currentNeighbors = getNeighbors(x, y);
+	                int numSquares = currentNeighbors.length;
+	                if (getState(x, y)) {
+	                    if (numSquares == 2 || numSquares == 3) {
+	                        newBoard.updateState(x, y, true);
+	                    } else {
+	                        newBoard.updateState(x, y, false);
+	                    }
+	                } else {
+	                    if (numSquares == 3) {
+	                        newBoard.updateState(x, y, true);
+	                    } else {
+	                        newBoard.updateState(x, y, false);
+	                    }
+	                }
+	            }
+	        }
+	        // System.out.println("NEW BOARD");
+	        // newBoard.printBoard();
+	        this.board = newBoard.board;
+	        // System.out.println("UPDATED BOARD");
+	        // board.printBoard();
+    	}
     }
 
     public void drawBoard() {
+    	p.background(240);
+    	p.rectMode(PConstants.CORNER);
         boolean[][] squareStatus = getStates();
         for (int x = 0; x < xNum; x++) {
             for (int y = 0; y < yNum; y++) {
                 if (squareStatus[x][y]) {
-                    p.rect(x * xSize, y * ySize, xSize, ySize);
+                    p.rect(x * xSize, y * ySize + LConstants.menuHeight, xSize, ySize);
                 } else {
                 	p.fill(255);
-                    p.rect(x * xSize, y * ySize, xSize, ySize);
+                    p.rect(x * xSize, y * ySize + LConstants.menuHeight, xSize, ySize);
                     p.fill(0);
                 }
             }
         }
+        playButton.display();
     }
 
     public int getXNum() {
