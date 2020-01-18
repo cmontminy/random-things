@@ -1,4 +1,4 @@
 # random-things
 An assortment of random projects
 
-I haven't done much yet
+Moved Conway's Game of Life to its own repo
