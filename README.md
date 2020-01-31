@@ -7,3 +7,4 @@ ideas:
 - possible todo app or workout tracker app
 - maze solver
 - ai vs ai chess
+- another discord bot
