@@ -8,3 +8,4 @@ ideas:
 - maze solver
 - ai vs ai chess
 - another discord bot
+- go game
