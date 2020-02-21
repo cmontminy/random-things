@@ -9,3 +9,4 @@ ideas:
 - ai vs ai chess
 - another discord bot
 - go game
+- analyze the random functions of different languages
