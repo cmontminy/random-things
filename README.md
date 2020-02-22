@@ -10,3 +10,4 @@ ideas:
 - another discord bot
 - go game
 - analyze the random functions of different languages
+- discord bot to translate languages easily
