@@ -1,4 +1,13 @@
 # random-things
 An assortment of random projects
 
-I haven't done much yet
+Moved Conway's Game of Life to its own repo
+
+ideas:
+- possible todo app or workout tracker app
+- maze solver
+- ai vs ai chess
+- another discord bot
+- go game
+- analyze the random functions of different languages
+- discord bot to translate languages easily
